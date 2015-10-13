@@ -129,17 +129,17 @@ APIBehaviorImpl = {
             self.set('_body', null);
             
             var originalEndpointPath = false;
-            if(self[endpoint].path.indexOf("{") != -1) {
-              originalEndpointPath = self[endpoint].path;
+            if(self.endpoints[endpoint].path.indexOf("{") != -1) {
+              originalEndpointPath = self.endpoints[endpoint].path;
             }
             
             if(params) {
               if(typeof params.route != "undefined") {
                 
                 params.route.forEach(function(param) {
-                  var path = self[endpoint].path;
+                  var path = self.endpoints[endpoint].path;
                   var routeParamNameLength = path.indexOf("}") - path.indexOf("{") + 1;
-                  self[endpoint].path = path.slice(0, path.indexOf("{")) + param + path.slice(path.indexOf("{") + Math.abs(routeParamNameLength));
+                  self.endpoints[endpoint].path = path.slice(0, path.indexOf("{")) + param + path.slice(path.indexOf("{") + Math.abs(routeParamNameLength));
                 })
                 
               }
@@ -249,7 +249,7 @@ APIBehaviorImpl = {
         self.set('endpoint', endpoint);
         
         if(originalEndpointPath) {
-          endpoint.path = originalEndpointPath;
+          self.endpoints[endpoint].path = originalEndpointPath;
         }
       }
       
