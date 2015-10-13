@@ -128,13 +128,32 @@ APIBehaviorImpl = {
             
             self.set('_body', null);
             
+            var originalEndpointPath = false;
+            if(self[endpoint].path.indexOf("{") != -1) {
+              originalEndpointPath = self[endpoint].path;
+            }
+            
             if(params) {
-              self.set('_params', params);
+              if(typeof params.route != "undefined") {
+                
+                params.route.forEach(function(param) {
+                  var path = self[endpoint].path;
+                  var routeParamNameLength = path.indexOf("}") - path.indexOf("{") + 1;
+                  self[endpoint].path = path.slice(0, path.indexOf("{")) + param + path.slice(path.indexOf("{") + Math.abs(routeParamNameLength));
+                })
+                
+              }
+              
+              if(typeof params.url != "undefined") {
+                self.set('_params', params);
+              } else {
+                self.set('_params', {});
+              }
             } else {
               self.set('_params', {});
             }
             
-            setEndpointVars(endpoint);
+            setEndpointVars(endpoint, originalEndpointPath);
             
             return generateAndHandleRequest(cb);
             
@@ -161,13 +180,32 @@ APIBehaviorImpl = {
             
             self.set('_body', body);
             
+            var originalEndpointPath = false;
+            if(self[endpoint].path.indexOf("{") != -1) {
+              originalEndpointPath = self[endpoint].path;
+            }
+            
             if(params) {
-              self.set('_params', params);
+              if(typeof params.route != "undefined") {
+                
+                params.route.forEach(function(param) {
+                  var path = self[endpoint].path;
+                  var routeParamNameLength = path.indexOf("}") - path.indexOf("{") + 1;
+                  self[endpoint].path = path.slice(0, path.indexOf("{")) + param + path.slice(path.indexOf("{") + Math.abs(routeParamNameLength));
+                })
+                
+              }
+              
+              if(typeof params.url != "undefined") {
+                self.set('_params', params);
+              } else {
+                self.set('_params', {});
+              }
             } else {
               self.set('_params', {});
             }
             
-            setEndpointVars(endpoint);
+            setEndpointVars(endpoint, originalEndpointPath);
             
             return generateAndHandleRequest(cb);
             
@@ -175,7 +213,7 @@ APIBehaviorImpl = {
           break;
       }
       
-      function setEndpointVars(endpoint) {
+      function setEndpointVars(endpoint, originalEndpointPath) {
         
         self.set('_method', self.endpoints[endpoint].method);
         if(self.endpoints[endpoint].host) {
@@ -209,6 +247,10 @@ APIBehaviorImpl = {
         }
         
         self.set('endpoint', endpoint);
+        
+        if(originalEndpointPath) {
+          endpoint.path = originalEndpointPath;
+        }
       }
       
       function generateAndHandleRequest(cb) {
