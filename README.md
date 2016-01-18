@@ -1,12 +1,15 @@
 # APIBehavior
 APIBehavior makes it super easy to interface with APIs in Polymer!
 
-```
-NOTE: This repo has been deprecated and now lives here:
-https://github.com/yarn-co/yarn-sdk-behavior
-```
 
-install with `bower install yarn-api-behavior`
+##NOTE: This repo has been deprecated and now lives here:
+
+https://github.com/yarn-co/yarn-sdk-behavior
+
+install with `bower install yarn-sdk-behavior`
+
+
+
 
 This behavior is intended to be used to create a Polymer element to interface with an API you want to use in your project.
 
